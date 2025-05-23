@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElementQuest - Chemistry Learning Games</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 90%;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        
+        header {
+            background-color: #1565c0;
+            color: white;
+            padding: 2rem 0;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .game-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: #42a5f5;
+            transition: height 0.3s ease;
+        }
+        
+        .game-card:nth-child(1)::before {
+            background-color: #f44336;
+        }
+        
+        .game-card:nth-child(2)::before {
+            background-color: #4caf50;
+        }
+        
+        .game-card:nth-child(3)::before {
+            background-color: #ff9800;
+        }
+        
+        .game-card:nth-child(4)::before {
+            background-color: #9c27b0;
+        }
+        
+        .game-card:hover::before {
+            height: 12px;
+        }
+        
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #1565c0;
+            transition: transform 0.3s ease;
+        }
+        
+        .game-card:hover .game-icon {
+            transform: scale(1.2);
+        }
+        
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .game-description {
+            color: #666;
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        footer {
+            margin-top: auto;
+            padding: 1rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .atom-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .atom-animation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            width: 80px;
+            position: relative;
+        }
+        
+        .nucleus {
+            width: 20px;
+            height: 20px;
+            background-color: #1565c0;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        
+        .electron-orbit {
+            position: absolute;
+            border: 2px solid rgba(21, 101, 192, 0.3);
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            animation: rotate 3s linear infinite;
+        }
+        
+        .electron-orbit:nth-child(2) {
+            transform: rotate(60deg);
+        }
+        
+        .electron-orbit:nth-child(3) {
+            transform: rotate(120deg);
+        }
+        
+        .electron {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #1565c0;
+            border-radius: 50%;
+            top: -4px;
+            left: calc(50% - 4px);
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .element-bubble {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: float 15s infinite linear;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg" id="animated-bg"></div>
+    
+    <div class="container">
+        <header>
+            <div class="atom-animation">
+                <div class="nucleus"></div>
+                <div class="electron-orbit">
+                    <div class="electron"></div>
+                </div>
+                <div class="electron-orbit">
+                    <div class="electron"></div>
+                </div>
+                <div class="electron-orbit">
+                    <div class="electron"></div>
+                </div>
+            </div>
+            <h1>ElementQuest</h1>
+            <div class="subtitle">Master the Periodic Table through Fun Games</div>
+        </header>
+        
+        <h2>Choose a Game Mode</h2>
+        
+        <div class="game-grid">
+            <div class="game-card" onclick="alert('Findword game will be implemented here!')">
+                <div class="game-icon">🔍</div>
+                <div class="game-title">Findword</div>
+                <div class="game-description">
+                    Search for chemical elements hidden in a grid of letters. How many can you find?
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="alert('Quiz game will be implemented here!')">
+                <div class="game-icon">❓</div>
+                <div class="game-title">Quiz</div>
+                <div class="game-description">
+                    Test your knowledge with multiple-choice questions about elements and their properties.
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="alert('Random wheel game will be implemented here!')">
+                <div class="game-icon">🎡</div>
+                <div class="game-title">Random Wheel</div>
+                <div class="game-description">
+                    Spin the wheel to get random elements and guess their properties to earn points.
+                </div>
+            </div>
+            
+            <div class="game-card" onclick="alert('Matching elements game will be implemented here!')">
+                <div class="game-icon">🔗</div>
+                <div class="game-title">Matching Elements</div>
+                <div class="game-description">
+                    Match element symbols with their names, atomic numbers, or other properties.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        &copy; 2025 ElementQuest | Learn Chemistry Through Play
+    </footer>
+
+    <script>
+        // Create floating element bubbles in the background
+        const elements = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'];
+        const animatedBg = document.getElementById('animated-bg');
+        
+        elements.forEach((el, index) => {
+            const bubble = document.createElement('div');
+            bubble.className = 'element-bubble';
+            bubble.innerText = el;
+            
+            // Random starting positions
+            const startLeft = Math.random() * 100;
+            const startTop = Math.random() * 100;
+            const size = 30 + Math.random() * 30;
+            
+            bubble.style.left = `${startLeft}%`;
+            bubble.style.top = `${startTop}%`;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            
+            // Animation properties
+            const duration = 15 + Math.random() * 20;
+            const delay = Math.random() * 10;
+            
+            bubble.style.animation = `float ${duration}s infinite linear ${delay}s`;
+            
+            // Create unique keyframes for each bubble
+            const keyframes = `
+                @keyframes float {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px); }
+                    50% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px); }
+                    75% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px); }
+                    100% { transform: translate(0, 0); }
+                }
+            `;
+            
+            const style = document.createElement('style');
+            style.innerHTML = keyframes;
+            document.head.appendChild(style);
+            
+            animatedBg.appendChild(bubble);
+        });
+    </script>
+</body>
+</html>
