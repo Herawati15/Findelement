@@ -1,0 +1,59 @@
+/* Reset default */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Body */
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+    color: #333;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  /* Header */
+  header h1 {
+    font-size: 3em;
+    color: #00796b;
+    margin-bottom: 10px;
+  }
+  
+  header p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+  }
+  
+  /* Menu */
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .menu button {
+    padding: 15px;
+    font-size: 1.1em;
+    background-color: #4db6ac;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .menu button:hover {
+    background-color: #00796b;
+  }
+  
+  /* Footer */
+  footer {
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #666;
+  }
+  
